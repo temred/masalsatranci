@@ -1,20 +1,21 @@
-// Piece.tsx (YENİ HALİ – iOS’ta mükemmel görünür)
+// Piece.tsx – Tüm taşlar eşit boyutta olacak şekilde düzeltilmiş
 import React from 'react';
 import { PlayerColor } from '../types';
 
 const pieceSymbols: Record<string, string> = {
-  k: '♔', // beyaz şah
+  k: '♔',
   q: '♕',
   r: '♖',
   b: '♗',
   n: '♘',
-  p: '♙', // beyaz piyon
-  K: '♚', // siyah
+  p: '♙',
+
+  K: '♚',
   Q: '♛',
   R: '♜',
   B: '♝',
   N: '♞',
-  P: '♟', // siyah piyon
+  P: '♟',
 };
 
 export const Piece: React.FC<{ type: string; color: PlayerColor }> = ({ type, color }) => {
@@ -28,8 +29,8 @@ export const Piece: React.FC<{ type: string; color: PlayerColor }> = ({ type, co
     <div 
       className="w-full h-full flex items-center justify-center select-none"
       style={{
-        fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif',
-        fontSize: 'clamp(48px, 10vw, 80px)',  // responsive ve büyük
+        fontFamily: '"Noto Sans Symbols2", "Segoe UI Symbol", sans-serif', // 🔥 EŞİT BOYUT SİHRİ
+        fontSize: 'clamp(48px, 10vw, 80px)',
         lineHeight: '1',
         height: '100%',
         display: 'flex',
