@@ -1,50 +1,51 @@
 import React from 'react';
 import { PlayerColor } from '../types';
 
-// SVG taşları import ediyoruz (dosyaları src/components/pieces/ klasörüne koydun değil mi?)
-import WhitePawn from './pieces/WhitePawn.svg';
-import WhiteRook from './pieces/WhiteRook.svg';
-import WhiteKnight from './pieces/WhiteKnight.svg';
-import WhiteBishop from './pieces/WhiteBishop.svg';
-import WhiteQueen from './pieces/WhiteQueen.svg';
-import WhiteKing from './pieces/WhiteKing.svg';
-
-import BlackPawn from './pieces/BlackPawn.svg';
-import BlackRook from './pieces/BlackRook.svg';
-import BlackKnight from './pieces/BlackKnight.svg';
-import BlackBishop from './pieces/BlackBishop.svg';
-import BlackQueen from './pieces/BlackQueen.svg';
-import BlackKing from './pieces/BlackKing.svg';
-
 interface PieceProps {
-  type: string; // 'p', 'n', 'b', 'r', 'q', 'k'
+  type: string;
   color: PlayerColor;
 }
 
-// Hangi taş hangi SVG olacak → harita
-const pieceSVGs: Record<string, Record<'w' | 'b', any>> = {
-  p: { w: WhitePawn,    b: BlackPawn },
-  r: { w: WhiteRook,    b: BlackRook },
-  n: { w: WhiteKnight,  b: BlackKnight },
-  b: { w: WhiteBishop,  b: BlackBishop },
-  q: { w: WhiteQueen,   b: BlackQueen },
-  k: { w: WhiteKing,    b: BlackKing },
+// Tüm SVG'ler base64 olarak burada – kopyala yapıştır yeter!
+const pieces: Record<string, Record<'w' | 'b', string>> = {
+  k: { // Şah
+    w: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIxOCIgZmlsbD0iI2ZmOTljYyIvPjxyZWN0IHg9IjQ1IiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjZmZkNzAwIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIxNSIgcj0iNiIgZmlsbD0iI2ZmZDcwMCIvPjxwYXRoIGQ9Ik0zMCA1MCBRNTAgMzAgNzAgNTAgTDY1IDg1IFE1MCA4MCAzNSA4NSBaIiBmaWxsPSIjZmY5OWNjIiBzdHJva2U9IiNmZjY5YjQiIHN0cm9rZS13aWR0aD0iNiIvcjwvc3ZnPg==",
+    b: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIxOCIgZmlsbD0iIzkwNWRhZiIvPjxyZWN0IHg9IjQ1IiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjYzRiNWZkIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIxNSIgcj0iNiIgZmlsbD0iI2M0YjVmZCIvPjxwYXRoIGQ9Ik0zMCA1MCBRNTAgMzAgNzAgNTAgTDY1IDg1IFE1MCA4MCAzNSA4NSBaIiBmaWxsPSIjOTA1ZGFmIiBzdHJva2U9IiM3YzNhZWQiIHN0cm9rZS13aWR0aD0iNiIvcjwvc3ZnPg=="
+  },
+  q: { // Vezir - Taçlı Prenses
+    w: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIxOCIgZmlsbD0iI2ZmOTljYyIvPjxwb2x5Z29uIHBvaW50cz0iNTAsMTAgMzgsMjUgNjIsMjUiIGZpbGw9IiNmZmQ3MDAiIHN0cm9rZT0iI2ZmNjliNCIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTMwIDUwIFE1MCAzMDAgNzAgNTAgTDY1IDg1IFE1MCA4MCAzNSA4NSBaIiBmaWxsPSIjZmY5OWNjIiBzdHJva2U9IiNmZjY5YjQiIHN0cm9rZS13aWR0aD0iNiIvPjwvc3ZnPg==",
+    b: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIxOCIgZmlsbD0iIzkwNWRhZiIvPjxwb2x5Z29uIHBvaW50cz0iNTAsMTAgMzgsMjUgNjIsMjUiIGZpbGw9IiNjNGI1ZmQiIHN0cm9rZT0iIzdjM2FlZCIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTMwIDUwIFE1MCAzMCA3MCA1MCBMNjUgODUgUTUwIDgwIDM1IDg1IFoiIGZpbGw9IiM5MDVkYWYiIHN0cm9rZT0iIzdjM2FlZCIgc3Ryb2tlLXdpZHRoPSI2Ii8+PC9zdmc+"
+  },
+  r: { // Kale - Küçük şato
+    w: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIyNSIgeT0iNDAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcng9IjEwIiBmaWxsPSIjZmY5OWNjIiBzdHJva2U9IiNmZjY5YjQiIHN0cm9rZS13aWR0aD0iNSIvPjxyZWN0IHg9IjMwIiB5PSIyNSIgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjZmY5OWNjIi8+PHJlY3QgeD0iNTAiIHk9IjI1IiB3aWR0aD0iMTAiIGhlaWdodD0iMjAiIGZpbGw9IiNmZjk5Y2MiLz48cmVjdCB4PSI3MCIgeT0iMjUiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMCIgZmlsbD0iI2ZmOTljYyIvPjwvc3ZnPg==",
+    b: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIyNSIgeT0iNDAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcng9IjEwIiBmaWxsPSIjOTA1ZGFmIiBzdHJva2U9IiM3YzNhZWQiIHN0cm9rZS13aWR0aD0iNSIvPjxyZWN0IHg9IjMwIiB5PSIyNSIgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjOTA1ZGFmIi8+PHJlY3QgeD0iNTAiIHk9IjI1IiB3aWR0aD0iMTAiIGhlaWdodD0iMjAiIGZpbGw9IiM5MDVkYWYiLz48cmVjdCB4PSI3MCIgeT0iMjUiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzkwNWRhZiIvPjwvc3ZnPg=="
+  },
+  b: { // Fil
+    w: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iNTAiIGN5PSI3MCIgcng9IjMwIiByeT0iMjAiIGZpbGw9IiNmZjk5Y2MiIHN0cm9rZT0iI2ZmNjliNCIgc3Ryb2tlLXdpZHRoPSI1Ii8+PHBhdGggZD0iTTUwIDE1IEwzNSA1MCBMNjUgNTAgWiIgZmlsbD0iI2ZmOTljYyIgc3Ryb2tlPSIjZmY2OWI0IiBzdHJva2Utd2lkdGg9IjUiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjI1IiByPSI4IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIyMiIgcj0iNCIgZmlsbD0iI2ZmZDcwMCIvPjwvc3ZnPg==",
+    b: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iNTAiIGN5PSI3MCIgcng9IjMwIiByeT0iMjAiIGZpbGw9IiM5MDVkYWYiIHN0cm9rZT0iIzdjM2FlZCIgc3Ryb2tlLXdpZHRoPSI1Ii8+PHBhdGggZD0iTTUwIDE1IEwzNSA1MCBMNjUgNTAgWiIgZmlsbD0iIzkwNWRhZiIgc3Ryb2tlPSIjd2MzYWVkIiBzdHJva2Utd2lkdGg9IjUiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjI1IiByPSI4IiBmaWxsPSIjZjNlOGZmIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIyMiIgcj0iNCIgZmlsbD0iI2M0YjVmZCIvPjwvc3ZnPg=="
+  },
+  n: { // At - UNICORN! 🦄
+    w: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMzAgODAgUTUwIDIwIDcwIDgwIEw2NSA2NSBRNTAgNzUgMzUgNjUgWiIgZmlsbD0iI2ZmOTljYyIgc3Ryb2tlPSIjZmY2OWI0IiBzdHJva2Utd2lkdGg9IjUiLz48Y2lyY2xlIGN4PSI0NSIgY3k9IjM1IiByPSIxMiIgZmlsbD0iI2ZmZmZmIi8+PHBhdGggZD0iTTQ1IDIwIEw0OCAxMCBMNTUgMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZDcwMCIgc3Ryb2tlLXdpZHRoPSI4Ii8+PGNpcmNsZSBjeD0iNDIiIGN5PSIzNSIgcj0iMyIgZmlsbD0iIzMzMyIvPjxjaXJjbGUgY3g9IjUyIiBjeT0iMzUiIHI9IjMiIGZpbGw9IiMzMzMiLz48L3N2Zz4=",
+    b: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMzAgODAgUTUwIDIwIDcwIDgwIEw2NSA2NSBRNTAgNzUgMzUgNjUgWiIgZmlsbD0iIzkwNWRhZiIgc3Ryb2tlPSIjd2MzYWVkIiBzdHJva2Utd2lkdGg9IjUiLz48Y2lyY2xlIGN4PSI0NSIgY3k9IjM1IiByPSIxMiIgZmlsbD0iI2YzZThmZiIvPjxwYXRoIGQ9Ik00NSAyMCBMNDggMTAgNTUgMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M0YjVmZCIgc3Ryb2tlLXdpZHRoPSI4Ii8+PGNpcmNsZSBjeD0iNDIiIGN5PSIzNSIgcj0iMyIgZmlsbD0iIzMzMyIvPjxjaXJjbGUgY3g9IjUyIiBjeT0iMzUiIHI9IjMiIGZpbGw9IiMzMzMiLz48L3N2Zz4="
+  },
+  p: { // Piyon - Minik peri
+    w: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iI2ZmZjBmNSIgc3Ryb2tlPSIjZmY5OWNjIiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjM1IiByPSIxOCIgZmlsbD0iI2ZmOTljYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNzIiIHI9IjIyIiBmaWxsPSIjZmY5OWNjIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIyMCIgcj0iMTAiIGZpbGw9IiNmZmYwZjUiLz48L3N2Zz4=",
+    b: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iI2YzZThmZiIgc3Ryb2tlPSIjn2Q3YWVhIiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjM1IiByPSIxOCIgZmlsbD0iIzkwNWRhZiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNzIiIHI9IjIyIiBmaWxsPSIjOTA1ZGFmIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIyMCIgcj0iMTAiIGZpbGw9IiNmM2U4ZmYiLz48L3N2Zz4="
+  }
 };
 
 export const Piece: React.FC<PieceProps> = ({ type, color }) => {
-  const SvgIcon = pieceSVGs[type.toLowerCase()]?.[color];
+  const svgData = pieces[type.toLowerCase()]?.[color];
 
-  // Taş yoksa boş dön (boş kare)
-  if (!SvgIcon) return null;
+  if (!svgData) return null;
 
   return (
-    <div className="w-full h-full flex items-center justify-center select-none cursor-pointer">
-      <img
-        src={SvgIcon}
-        alt=""
+    <div className="w-full h-full flex items-center justify-center select-none cursor-grab active:cursor-grabbing">
+      <img 
+        src={svgData} 
+        alt="" 
+        className="w-[88%] h-[88%] object-contain drop-shadow-lg hover:scale-110 active:scale-95 transition-all duration-200"
         draggable={false}
-        className="w-[86%] h-[86%] object-contain drop-shadow-lg 
-                   transition-all duration-200 hover:scale-110 active:scale-95"
       />
     </div>
   );
