@@ -1,50 +1,43 @@
+// Piece.tsx (YENİ HALİ – iOS’ta mükemmel görünür)
 import React from 'react';
 import { PlayerColor } from '../types';
 
-interface PieceProps {
-  type: string; // p, n, b, r, q, k
-  color: PlayerColor;
-}
+const pieceSymbols: Record<string, string> = {
+  k: '♔', // beyaz şah
+  q: '♕',
+  r: '♖',
+  b: '♗',
+  n: '♘',
+  p: '♙', // beyaz piyon
+  K: '♚', // siyah
+  Q: '♛',
+  R: '♜',
+  B: '♝',
+  N: '♞',
+  P: '♟', // siyah piyon
+};
 
-export const Piece: React.FC<PieceProps> = ({ type, color }) => {
-  
-  const symbols: Record<string, string> = {
-    p: '♟',
-    r: '♜',
-    n: '♞',
-    b: '♝',
-    q: '♛',
-    k: '♚',
-  };
+export const Piece: React.FC<{ type: string; color: PlayerColor }> = ({ type, color }) => {
+  const key = color === PlayerColor.WHITE 
+    ? type.toLowerCase() 
+    : type.toUpperCase();
 
-  const symbol = symbols[type.toLowerCase()] || '';
-
-  const isWhite = color === PlayerColor.WHITE;
-  
-  // CSS Text Stroke (kontür) ve gölgelendirme ile görünürlük ayarları
-  const colorStyle: React.CSSProperties = isWhite 
-    ? { 
-        color: '#FFFFFF', 
-        // Beyaz taşlar için koyu gri kontür ve hafif 3D efekti
-        textShadow: '0 2px 0 #cbd5e1',
-        WebkitTextStroke: '1.5px #475569', // Slate-600 kontür
-        paintOrder: 'stroke fill'
-      } 
-    : { 
-        color: '#4C1D95', // Koyu mor
-        textShadow: '0 2px 0 #DDD6FE' // Açık mor gölge
-      };
+  const symbol = pieceSymbols[key] || '';
 
   return (
     <div 
-      className="w-full h-full flex items-center justify-center select-none cursor-pointer leading-none"
-      style={colorStyle}
+      className="w-full h-full flex items-center justify-center select-none"
+      style={{
+        fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif',
+        fontSize: 'clamp(48px, 10vw, 80px)',  // responsive ve büyük
+        lineHeight: '1',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      {/* Font boyutunu küçülttük ve responsive yaptık (text-3xl sm:text-4xl). 
-          leading-none satır yüksekliğinin kareyi itmesini engeller. */}
-      <span className="text-3xl sm:text-4xl md:text-5xl drop-shadow-sm transition-transform hover:scale-110">
-        {symbol}
-      </span>
+      <span style={{ transform: 'translateY(2px)' }}>{symbol}</span>
     </div>
   );
 };
