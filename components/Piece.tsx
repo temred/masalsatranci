@@ -2,49 +2,51 @@ import React from 'react';
 import { PlayerColor } from '../types';
 
 interface PieceProps {
-  type: string; // p, n, b, r, q, k
+  type: string; // "p", "r", "n", "b", "q", "k"
   color: PlayerColor;
+  size?: string | number;
 }
 
-export const Piece: React.FC<PieceProps> = ({ type, color }) => {
-  
-  const symbols: Record<string, string> = {
-    p: '♟',
-    r: '♜',
-    n: '♞',
-    b: '♝',
-    q: '♛',
-    k: '♚',
-  };
+const pieceMap: Record<'white' | 'black', Record<string, string>> = {
+  white: {
+    p: '/pieces/pawn-w.svg',
+    r: '/pieces/rook-w.svg',
+    n: '/pieces/knight-w.svg',
+    b: '/pieces/bishop-w.svg',
+    q: '/pieces/queen-w.svg',
+    k: '/pieces/king-w.svg',
+  },
+  black: {
+    p: '/pieces/pawn-b.svg',
+    r: '/pieces/rook-b.svg',
+    n: '/pieces/knight-b.svg',
+    b: '/pieces/bishop-b.svg',
+    q: '/pieces/queen-b.svg',
+    k: '/pieces/king-b.svg',
+  }
+};
 
-  const symbol = symbols[type.toLowerCase()] || '';
+export const Piece: React.FC<PieceProps> = ({ type, color, size = '90%' }) => {
+  const col = color === PlayerColor.WHITE ? 'white' : 'black';
+  const key = type.toLowerCase();
+  const src = pieceMap[col][key];
 
-  const isWhite = color === PlayerColor.WHITE;
-  
-  // CSS Text Stroke (kontür) ve gölgelendirme ile görünürlük ayarları
-  const colorStyle: React.CSSProperties = isWhite 
-    ? { 
-        color: '#FFFFFF', 
-        // Beyaz taşlar için koyu gri kontür ve hafif 3D efekti
-        textShadow: '0 2px 0 #cbd5e1',
-        WebkitTextStroke: '1.5px #475569', // Slate-600 kontür
-        paintOrder: 'stroke fill'
-      } 
-    : { 
-        color: '#4C1D95', // Koyu mor
-        textShadow: '0 2px 0 #DDD6FE' // Açık mor gölge
-      };
+  if (!src) return null;
 
   return (
-    <div 
-      className="w-full h-full flex items-center justify-center select-none cursor-pointer leading-none"
-      style={colorStyle}
-    >
-      {/* Font boyutunu küçülttük ve responsive yaptık (text-3xl sm:text-4xl). 
-          leading-none satır yüksekliğinin kareyi itmesini engeller. */}
-      <span className="text-3xl sm:text-4xl md:text-5xl drop-shadow-sm transition-transform hover:scale-110">
-        {symbol}
-      </span>
+    <div className="w-full h-full flex items-center justify-center select-none">
+      <img
+        src={src}
+        alt={`${col} ${key}`}
+        style={{
+          width: typeof size === 'number' ? `${size}px` : size,
+          height: typeof size === 'number' ? `${size}px` : size,
+          objectFit: 'contain',
+          display: 'block',
+          pointerEvents: 'none'
+        }}
+        draggable={false}
+      />
     </div>
   );
 };
