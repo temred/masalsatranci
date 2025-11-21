@@ -56,7 +56,7 @@ export const Board: React.FC<BoardProps> = ({ fen, onMove, disabled, lastMove })
   return (
     <div className={`w-full max-w-[400px] mx-auto ${disabled ? 'opacity-80 pointer-events-none grayscale-[0.3]' : ''} transition-all duration-300 select-none`}>
       <div className="grid grid-cols-[auto_1fr] gap-1">
-        
+
         {/* Ranks (Left side) */}
         <div className="flex flex-col justify-around text-pink-400 font-bold text-xs sm:text-sm py-2">
           {RANKS.map((rank) => (
@@ -65,7 +65,7 @@ export const Board: React.FC<BoardProps> = ({ fen, onMove, disabled, lastMove })
         </div>
 
         {/* Chess Board */}
-        <div 
+        <div
           className="grid grid-cols-8 gap-0 w-full aspect-square border-4 border-pink-300 rounded-xl overflow-hidden shadow-2xl bg-white ring-4 ring-pink-100"
         >
           {RANKS.map((rank, rankIndex) => (
@@ -80,25 +80,31 @@ export const Board: React.FC<BoardProps> = ({ fen, onMove, disabled, lastMove })
 
               // Colors
               let bgClass = isDark ? 'bg-pink-200' : 'bg-pink-50'; // Soft pink theme
-              
-              if (isSelected) bgClass = 'bg-yellow-200 animate-pulse';
-              else if (isLastMoveSource || isLastMoveDest) bgClass = isDark ? 'bg-purple-200' : 'bg-purple-100';
-              
+
+              // Apply selected square styling with yellow pulsing animation
+              if (isSelected) {
+                bgClass = 'bg-yellow-300 animate-pulse';
+              }
+              // Apply last move highlighting with purple color
+              else if (isLastMoveSource || isLastMoveDest) {
+                bgClass = isDark ? 'bg-purple-300' : 'bg-purple-200';
+              }
+
               return (
                 <div
                   key={square}
                   onClick={() => handleSquareClick(square)}
                   // 'aspect-square' ensures specific square ratio
                   // 'overflow-hidden' prevents large pieces from expanding the cell
-                  className={`relative w-full h-full aspect-square ${bgClass} flex items-center justify-center overflow-hidden`}
+                  className={`relative w-full h-full aspect-square ${bgClass} flex items-center justify-center overflow-hidden transition-colors duration-200`}
                 >
-                  {/* Possible Move Indicator */}
+                  {/* Possible Move Indicator - Green dot for empty squares, Red ring for captures */}
                   {isPossibleMove && (
-                    <div className={`absolute w-3 h-3 sm:w-4 sm:h-4 rounded-full ${piece ? 'bg-red-400 ring-4 ring-red-200' : 'bg-green-400'} opacity-60 z-10 pointer-events-none`} />
+                    <div className={`absolute w-3 h-3 sm:w-4 sm:h-4 rounded-full ${piece ? 'bg-red-500 ring-4 ring-red-300 opacity-70' : 'bg-green-400 opacity-60'} z-10 pointer-events-none`} />
                   )}
 
                   {piece && (
-                    <div className="z-20 w-full h-full flex items-center justify-center pointer-events-none">
+                    <div className="z-20 w-full h-full flex items-center justify-center">
                       <Piece type={piece.type} color={piece.color === 'w' ? PlayerColor.WHITE : PlayerColor.BLACK} />
                     </div>
                   )}
