@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Chess } from 'https://esm.sh/chess.js@1.0.0-beta.8';
-import { Board } from './Board';
-import { Confetti } from './Confetti';
-import { getAiMove, getWelcomeMessage, generateSpeech } from '../services/geminiService';
-import { makeMove, isCheckmate, isDraw, isCheck, getLegalMoves } from '../services/chessLogic';
-import { soundEffects } from '../services/soundEffects';
-import { GameStatus, Move, PlayerColor } from '../types';
+import { Board } from './components/Board';
+import { Confetti } from './components/Confetti';
+import { getAiMove, getWelcomeMessage, generateSpeech } from './services/geminiService';
+import { makeMove, isCheckmate, isDraw, isCheck, getLegalMoves } from './services/chessLogic';
+import { soundEffects } from './services/soundEffects';
+import { GameStatus, Move, PlayerColor } from './types';
 import { RefreshCw, Sparkles, Star, Volume2, Play, Undo } from 'lucide-react';
 
 const INITIAL_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
